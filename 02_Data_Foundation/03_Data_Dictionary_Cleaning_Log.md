@@ -1,17 +1,13 @@
 # Data Dictionary & Cleaning Log
 
-## 1. Project Overview
-This document serves as the single source of truth for the data used in the "IT Peer Benchmark & Strategic Gap Analysis" project. All SQL queries and dashboards are strictly based on this dataset and the limitations documented below.
+## 1. Data Source & Scope
+To ensure the benchmarking analysis is factual and reliable, I carefully defined the data boundaries:
+- **Source:** Financial data (Revenue, EBITDA, Employee Cost) was extracted from Screener.in. Headcount was verified using Annual Reports and Investor Presentations.
+- **Time Frame:** The core analysis is restricted to a 5-year window from FY2021 to FY2025.
+- **Data Scope (What was excluded):** Screener.in also displays forward-looking estimates for FY2026. Because this is a historical benchmarking project, I strictly excluded the FY2026 data to prevent the analysis from being polluted by estimates. The dataset only contains hard facts up to FY2025.
 
-## 2. Data Source
-- **Primary Source:** Screener.in (Consolidated Financial Statements).
-- **Secondary Source:** Annual Reports and Quarterly Investor Presentations (for Headcount verification).
-- **Companies Covered:** Persistent Systems (Company X) and 6 Peers (KPIT, Coforge, Mphasis, LTTS, Cyient, Zensar).
-- **Time Period:** FY2021 to FY2025 (5 Years).
-- **Currency:** All financial figures are normalized to ₹ Crores (INR Cr).
-
-## 3. Data Dictionary
-The dataset contains the following columns:
+## 2. Data Dictionary
+The dataset (`peer_financials.csv`) contains the following 6 fields:
 
 | Column Name | Description | Data Type |
 | :--- | :--- | :--- |
@@ -22,20 +18,13 @@ The dataset contains the following columns:
 | `employee_cost` | Employee Benefit Expense | Number (₹ Cr) |
 | `employee_count` | Total closing headcount at the end of the financial year | Number |
 
-## 4. Cleaning Log (Data Limitations & Handling)
-To ensure data integrity and transparency, the following limitations were identified and handled during the analysis:
+## 3. Data Cleaning Log (Challenges & Solutions)
+During the project, I encountered specific data issues. Instead of ignoring them, I documented and resolved them to maintain data integrity:
 
-1. **Headcount Data (FY21-FY23):** 
-   - **Issue:** Historical headcount data across different sources (Annual reports vs. third-party aggregators) was inconsistent for the years FY2021, FY2022, and FY2023. 
-   - **Handling:** To prevent any false analysis, `employee_count` is intentionally left blank for FY21-FY23 in the raw CSV. We have only recorded verified headcount data for FY24 and FY25.
+**Challenge 1: Inconsistent Historical Headcount (FY21-FY23)**
+- **Issue:** Historical headcount data for FY21, FY22, and FY23 was inconsistent across different public platforms. 
+- **Solution:** To prevent false insights, I intentionally left `employee_count` blank for these three years in the CSV. Only verified numbers for FY24 and FY25 were recorded. As a result, metrics like `Revenue per Employee` are only calculated for the last two years.
 
-2. **Handling Blank Cells during MySQL Import:**
-   - **Issue:** When importing the raw CSV into MySQL Workbench, the blank cells in the `employee_count` column (for FY21-FY23) were automatically converted to `0`. 
-   - **Handling:** To fix this and prevent division-by-zero errors, I explicitly used the filter `WHERE employee_count > 0` in my SQL queries (Query 7 and Query 11). This ensures that productivity metrics are only calculated for FY24 and FY25 where genuine data exists.
-
-3. **Metrics Adjustments:**
-   - Because 5-year headcount is unavailable, the metric `Revenue per Employee` will only be calculated for FY24 and FY25.
-   - For the 5-year trend analysis, `Employee Cost Ratio` (Employee Cost / Revenue) will be used as the primary efficiency metric, as it does not require headcount.
-
-4. **Data Scope:**
-   - Any forward-looking estimates (like FY2026 projections available on Screener.in) have been strictly excluded. The project only analyzes historical, factual data up to FY2025.
+**Challenge 2: The MySQL 'Blank to Zero' Import Bug**
+- **Issue:** When I imported the CSV into MySQL Workbench for SQL analysis, the software automatically converted the blank headcount cells (FY21-FY23) into `0`. This is a known behavior in MySQL when the column data type is set to Integer.
+- **Solution:** If I had divided revenue by `0`, it would have resulted in errors or fake metrics. To handle this, I built a safeguard directly into my SQL queries. In Query 7 and Query 11, I explicitly added the condition `WHERE employee_count > 0`. This ensures that the productivity metrics only calculate for the years where real headcount data exists, filtering out the dummy zeros.
