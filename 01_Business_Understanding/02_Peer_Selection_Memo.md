@@ -1,16 +1,17 @@
 # Peer Selection Memo
 
-## 1. Objective
-To ensure a fair and meaningful "apples-to-apples" comparison, Persistent Systems was benchmarked against a carefully selected set of 6 mid-tier Indian IT services peers. Comparing Persistent with Tier-1 giants (like TCS, Infosys, or Wipro) would be misleading due to massive differences in scale, revenue, and operational structures.
+## 1. Objective & Methodology
+To ensure a fair "apples-to-apples" comparison, Persistent Systems was benchmarked against 6 carefully selected Indian IT services companies. Comparing Persistent with Tier-1 giants (like TCS or Infosys) would be misleading due to the massive difference in scale. 
+
+**Source of Data:** The financial data (FY21-FY25) for all selected companies was pulled from Screener.in to ensure a standardized, consolidated financial format.
 
 ## 2. Selection Criteria
-The peer group was selected based on three strict quantitative and qualitative filters:
-
+The peer group was selected based on three quantitative and qualitative filters:
 1.  **Revenue Band:** Companies within ±50% of Persistent Systems' FY25 revenue (approx ₹2,000 Cr to ₹15,000 Cr). This ensures similar scale.
-2.  **Geography & Listing:** India-based, publicly listed companies to ensure data reliability and regulatory consistency.
+2.  **Geography & Listing:** India-based, publicly listed companies to ensure data reliability.
 3.  **Service Mix:** IT services companies with a focus on digital transformation, enterprise services, or engineering R&D.
 
-## 3. Selected Peer Set (6 Companies)
+## 3. Selected Peer Set (6 Companies) & Business Rationale
 
 | Company | HQ | Business Focus | Rationale for Selection |
 | :--- | :--- | :--- | :--- |
