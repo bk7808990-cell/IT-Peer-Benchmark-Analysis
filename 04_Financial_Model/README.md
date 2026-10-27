@@ -1,27 +1,30 @@
 # Excel Financial Model: Peer Matrix & Margin Bridge
 
-This document outlines the structure and logic of the Excel financial model built for this project. The model is divided into three key tabs, designed to translate raw financial data into actionable business insights.
+This document explains the exact logic, formulas, and structure of the Excel model (`06_Excel_Margin_Bridge_Model.xlsx`). The model is designed to be driver-based, meaning raw data is entered once, and all metrics update automatically.
 
-## Tab 1: Peer Matrix (The Baseline)
-This tab contains the raw data and core derived metrics for all 7 companies across 5 years (FY21-FY25).
-- **Metrics Included:** Revenue (₹ Cr), EBITDA (₹ Cr), Employee Cost (₹ Cr), EBITDA Margin (%), and Employee Cost Ratio (%).
-- **Key Features:** 
-  - Calculates the **Peer Median** for every metric. (Why median? To ignore the distortion caused by extreme high/low performers like KPIT).
-  - Ranks Persistent Systems against its peers for FY25 across all core metrics.
+## Tab 1: Peer Matrix (Data & Baseline Metrics)
+This tab houses the raw historical data and calculates the core performance metrics for all 7 companies.
+
+**Data Structure & Formulas:**
+*   **Raw Data Columns:** `Company`, `Fiscal Year`, `Revenue`, `EBITDA`, `Employee Cost`.
+*   **Derived Metric 1 (EBITDA Margin %):** `= EBITDA / Revenue * 100`
+*   **Derived Metric 2 (Employee Cost Ratio %):** `= Employee Cost / Revenue * 100`
+*   **Benchmark (Peer Median):** Instead of an average, I used `=MEDIAN(Range)` for FY25 metrics. Why? Because with a small sample (n=7), an outlier like KPIT (high margin) or Zensar (low margin) can distort the average. Median gives the true "middle" company.
 
 ## Tab 2: Margin Bridge (The Gap Analysis)
-This tab uses a **Waterfall Chart** to show exactly *where* and *how much* Persistent Systems is losing in EBITDA margin compared to the peer median.
-- **Start Point:** Persistent Systems FY25 EBITDA Margin.
-- **End Point:** Peer Median FY25 EBITDA Margin.
-- **The Buckets (MECE Framework):**
-  1.  **Employee Cost Effect:** How much margin is lost/gained due to a higher/lower Employee Cost Ratio.
-  2.  **Other Cost Effect:** The impact of operational efficiencies (SG&A, etc.).
-  3.  **Revenue Mix Effect:** The impact of scale and pricing power.
+This tab uses a Waterfall Chart to isolate exactly *why* Persistent's margin is different from the Peer Median. 
+
+**The Math & Framework (MECE):**
+1.  **Start Point:** Persistent Systems FY25 EBITDA Margin (17.24%).
+2.  **End Point:** Peer Median FY25 EBITDA Margin (Approx 18.40%).
+3.  **The Gap:** The difference (Approx 1.16%) is broken down into impact buckets:
+    *   **Employee Cost Effect:** `(Persistent Emp Cost Ratio - Median Emp Cost Ratio) * Persistent Revenue`. This shows how much margin was lost purely due to higher salary costs.
+    *   **Operational Efficiency Effect:** The remaining gap, which represents other costs (SG&A, Rent, etc.) and revenue mix.
 
 ## Tab 3: Scenario & Sensitivity Analysis (Decision Support)
-This tab answers the leadership's "What-If" questions.
-- **Scenario Analysis:** 3-year forward projection under Base (current trajectory), Best (margin expansion), and Worst (margin contraction) cases.
-- **Sensitivity Table:** A mini-table showing the impact on EBITDA margin if Employee Cost is reduced by 5%, 10%, or if Revenue drops by 5%. (E.g., A 5% cost reduction adds ~290 bps to the margin).
-
----
-*Note: The actual Excel file (`06_Excel_Margin_Bridge_Model.xlsx`) will be uploaded to this folder. This README serves as the logic documentation for the file.*
+This tab provides leadership with forward-looking "What-If" scenarios.
+- **Scenario Projection:** A 3-year forward view (FY26-FY28) under Base (current trajectory), Best (margin expansion by 100 bps), and Worst (margin contraction).
+- **Sensitivity Table:** 
+  - *What if Employee Cost drops by 5%?* -> Formula: `= New EBITDA / Revenue`. 
+  - *What if Revenue drops by 5%?* -> Formula: `= EBITDA / New Revenue`.
+  - This isolates the direct impact of cost-cutting vs. revenue loss.
