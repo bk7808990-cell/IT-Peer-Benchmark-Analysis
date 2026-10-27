@@ -16,15 +16,16 @@ This tab uses a Waterfall Chart to isolate exactly *why* Persistent's margin is 
 
 **The Math & Framework (MECE):**
 1.  **Start Point:** Persistent Systems FY25 EBITDA Margin (17.24%).
-2.  **End Point:** Peer Median FY25 EBITDA Margin (Approx 18.40%).
-3.  **The Gap:** The difference (Approx 1.16%) is broken down into impact buckets:
-    *   **Employee Cost Effect:** `(Persistent Emp Cost Ratio - Median Emp Cost Ratio) * Persistent Revenue`. This shows how much margin was lost purely due to higher salary costs.
-    *   **Operational Efficiency Effect:** The remaining gap, which represents other costs (SG&A, Rent, etc.) and revenue mix.
+2.  **End Point:** Peer Median FY25 EBITDA Margin (18.37%).
+3.  **Total Gap:** The difference is **1.13%** (113 bps), which is broken down into impact buckets:
+    *   **Employee Cost Effect:** `(Persistent Emp Cost Ratio - Median Emp Cost Ratio)`. This shows how the margin is impacted purely due to differences in salary costs. (Result: -0.39%).
+    *   **Operational Efficiency Effect:** The remaining gap, which represents other costs (SG&A, Rent, etc.) and revenue mix. (Result: +1.52%).
+
+*Logic: Start (17.24%) - Emp Cost Effect (0.39%) + Ops Effect (1.52%) = End Point (18.37%).*
 
 ## Tab 3: Scenario & Sensitivity Analysis (Decision Support)
 This tab provides leadership with forward-looking "What-If" scenarios.
-- **Scenario Projection:** A 3-year forward view (FY26-FY28) under Base (current trajectory), Best (margin expansion by 100 bps), and Worst (margin contraction).
+- **Scenario Projection:** A 3-year forward view (FY26-FY28) under Base (10% growth trajectory), Best (15% growth), and Worst (5% growth).
 - **Sensitivity Table:** 
-  - *What if Employee Cost drops by 5%?* -> Formula: `= New EBITDA / Revenue`. 
-  - *What if Revenue drops by 5%?* -> Formula: `= EBITDA / New Revenue`.
-  - This isolates the direct impact of cost-cutting vs. revenue loss.
+  - *What if Employee Cost drops by 5%?* -> Formula: `= (Current EBITDA + 5% of Employee Cost) / Revenue`. 
+  - *Impact:* Shows the exact basis points (bps) gained in margin if the cost-cutting is executed. (Result: 288 bps gain).
