@@ -12,7 +12,6 @@ While Persistent Systems achieved the second-highest revenue growth in its peer 
 - **Answer:** The gap is driven by high Operations and SG&A costs. By streamlining these operations and optimizing employee costs, the company can add up to 288 basis points (bps) to its margin.
 
 ## Core Competencies Demonstrated
-The project required a combination of strategic, financial, and technical skills:
 - **Business Strategy:** Problem framing using the SCQA framework, MECE structuring, and executive communication.
 - **Financial Analysis:** P&L analysis, driver-based financial modeling, margin bridge (waterfall), and sensitivity analysis.
 - **Data Analytics:** Data cleaning, advanced SQL querying (Window Functions, CTEs), DAX measures, and dashboarding.
@@ -28,25 +27,25 @@ The project required a combination of strategic, financial, and technical skills
 3. **Leverage Productivity:** Shift from chasing low-margin revenue to negotiating value-based, high-margin deals.
 
 ## Technical Methodology and Stack
-- **Data Extraction and Cleaning:** Sourced 4-year P&L data from Screener.in. Handled historical data inconsistencies honestly (documented in the Data Dictionary) rather than fabricating data.
+- **Data Extraction and Cleaning:** Sourced 4-year P&L data from Screener.in. Handled historical data inconsistencies honestly (documented in the Data Dictionary).
 - **SQL Analysis:** Wrote 11 robust queries in MySQL covering CAGR, Percentile Ranking, and Gap-to-Median analysis. Utilized Window Functions and CTEs for advanced benchmarking.
 - **Financial Modeling:** Built a dynamic, driver-based model in Excel featuring a Margin Bridge and Scenario/Sensitivity analysis.
 - **Data Visualization:** Created a two-page decision-grade dashboard in Power BI featuring KPI cards, Heatmaps, Waterfall bridges, and actionable insight captions.
 
 ## AI Integration and Workflow
 AI was utilized as a productivity tool to accelerate delivery, not as a replacement for analytical thinking:
-- **Debugging:** Used AI to troubleshoot a MySQL import issue where blank cells were converted to zero (resolved by applying > 0 filters).
-- **Syntax Assistance:** Used AI for quick syntax checks on complex DAX measures and SQL Window Functions.
-- **Human Override:** The business logic, MECE framework, data validation, and strategic recommendations were entirely driven by human analytical thinking. AI was strictly used for code assistance and document structuring.
+- **Debugging & Syntax:** Used AI to troubleshoot a MySQL import issue (blank cells converting to zero) and for quick syntax checks on DAX measures and SQL Window Functions.
+- **Document Structuring:** Used AI to help format and structure the README and presentation outlines.
+- **Human Override:** The business logic, data extraction, MECE framework, validation of all mathematical calculations, and final strategic recommendations were entirely driven by human analytical thinking. I personally reviewed every line of code and every number to ensure 100% accuracy before inclusion.
 
 ## Data Limitations and Transparency
-Historical headcount data for FY21-FY23 was inconsistent across public platforms. To prevent false insights, Revenue per Employee was only calculated for FY24-FY25. For the four-year trend, Employee Cost Ratio was used as the primary efficiency metric. No fake data was generated. FY26 forward-looking estimates were strictly excluded from this historical analysis.
+Historical headcount data for FY21-FY23 was inconsistent across public platforms. To prevent false insights, Revenue per Employee was only calculated for FY24-FY25. For the four-year trend, Employee Cost Ratio was used as the primary efficiency metric. No fake data was generated. FY26 forward-looking estimates were strictly excluded.
 
 ## Repository Structure
-- `01_Business_Understanding`: Business Requirements Document (BRD), Peer Selection Memo, and Business Question Rationale.
-- `02_Data_Foundation`: Raw Data CSV and Data Dictionary (with Cleaning Log).
+- `01_Business_Understanding`: BRD, Peer Selection Memo, and Business Question Rationale.
+- `02_Data_Foundation`: Raw Data CSV and Data Dictionary.
 - `03_SQL_Analysis`: All 11 MySQL queries and Insights Summary.
-- `04_Financial_Model`: Driver-based Excel Model (Peer Matrix, Margin Bridge, Scenario Analysis).
-- `05_PowerBI_Dashboard`: Power BI file, dashboard screenshots, and logic documentation.
-- `06_Recommendations`: 2-page Insight Memo for leadership.
-- `07_Presentation`: Final 6-slide Executive Deck (PPT and PDF).
+- `04_Financial_Model`: Driver-based Excel Model.
+- `05_PowerBI_Dashboard`: Power BI file, dashboard screenshots.
+- `06_Recommendations`: 2-page Insight Memo.
+- `07_Presentation`: Final 6-slide Executive Deck.
