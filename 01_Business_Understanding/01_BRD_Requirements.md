@@ -1,8 +1,6 @@
 # Business Requirements Document (BRD)
 ## Project: IT Peer Benchmark & Strategic Gap Analysis
 
----
-
 ## 1. Project Background & Trigger (Why this project?)
 While analyzing the Indian IT services sector, I noticed a trend: mid-tier companies are growing rapidly, but their profit margins are often squeezed by rising employee costs. Persistent Systems stood out—it has shown strong revenue growth, but its EBITDA margin has historically hovered around 17%, which seemed lower than its closest competitors. 
 
@@ -15,7 +13,6 @@ To answer the leadership's question, I didn't just guess metrics. I used a top-d
 *   **The Benchmark:** Comparing against a raw average is misleading due to outliers. Therefore, I decided to frame questions around the *Peer Median* and *Percentile Rankings* to get a true picture of where Persistent stands.
 
 ## 3. Business Objectives
-
 | Objective | Metric | Target |
 | :--- | :--- | :--- |
 | Identify profitability gap | EBITDA Margin vs Peer Median | Quantify gap in basis points (bps) |
@@ -24,10 +21,9 @@ To answer the leadership's question, I didn't just guess metrics. I used a top-d
 | Provide recommendations | Actionable steps | 3 strategic recommendations |
 
 ## 4. Project Scope
-
 **In Scope:**
 - 7 Indian IT services companies (Persistent Systems + 6 peers).
-- Time Period: FY2021 to FY2025 (5 years).
+- Time Period: FY2021 to FY2025 (4-year growth window).
 - Metrics: Revenue, EBITDA, Employee Cost, and Headcount.
 - Deliverables: SQL Analysis, Financial Model, Power BI Dashboard, Insight Memo.
 
@@ -43,7 +39,7 @@ To answer the leadership's question, I didn't just guess metrics. I used a top-d
 
 ## 6. Problem Statement (Current State)
 - Persistent Systems' EBITDA margin is lagging compared to the peer group median.
-- The Employee Cost Ratio is higher than the most efficient peers, indicating an opportunity for operational optimization.
+- The Employee Cost Ratio is better than the median, indicating that the issue lies elsewhere.
 - The leadership does not have a consolidated view of exactly *where* the gaps are and *how much* financial impact they carry.
 
 ## 7. Desired Outcome (Future State)
@@ -53,11 +49,11 @@ To answer the leadership's question, I didn't just guess metrics. I used a top-d
 
 ## 8. Assumptions & Constraints
 - **Data Source:** Publicly available financial data from Screener.in and Annual Reports (FY21-FY25).
-- **Data Limitation:** Historical headcount data for FY21-FY23 was inconsistent across sources. To maintain data integrity, `Revenue per Employee` will only be calculated for FY24-FY25. For the 5-year trend, `Employee Cost Ratio` will be used.
+- **Data Limitation:** Historical headcount data for FY21-FY23 was inconsistent across sources. To maintain data integrity, `Revenue per Employee` will only be calculated for FY24-FY25. For the 4-year trend, `Employee Cost Ratio` will be used.
 - **Historical Data:** The analysis is strictly based on past performance, not future estimates.
 
 ## 9. Success Criteria
-- [ ] Verified data for 7 companies across 5 years.
+- [ ] Verified data for 7 companies across 4 years.
 - [ ] 11 SQL queries executed with business insights.
 - [ ] Excel Margin Bridge model built.
 - [ ] 2-page Power BI dashboard created.
