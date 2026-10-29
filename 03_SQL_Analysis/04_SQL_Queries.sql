@@ -6,17 +6,17 @@
 -- =========================================================================
 
 -- -------------------------------------------------------------------------
--- Query 1: Revenue CAGR (5-Year Growth)
--- Business Question: Kis company ka 5 saal ka growth sabse fast hai?
+-- Query 1: Revenue CAGR (4-Year Growth: FY21 to FY25)
+-- Business Question: Kis company ka 4 saal (FY21-FY25) ka growth sabse fast hai?
 -- So-What: Highlights the industry growth leaders vs. laggards.
 -- -------------------------------------------------------------------------
 SELECT 
     a.company,
-    ROUND((POWER(b.revenue / a.revenue, 1.0/5) - 1) * 100, 2) AS cagr_5_year_percent
+    ROUND((POWER(b.revenue / a.revenue, 1.0/4) - 1) * 100, 2) AS cagr_4_year_percent
 FROM peer_financials a
 JOIN peer_financials b ON a.company = b.company
 WHERE a.fiscal_year = 'FY21' AND b.fiscal_year = 'FY25'
-ORDER BY cagr_5_year_percent DESC;
+ORDER BY cagr_4_year_percent DESC;
 
 
 -- -------------------------------------------------------------------------
@@ -59,33 +59,53 @@ WHERE fiscal_year = 'FY25';
 
 
 -- -------------------------------------------------------------------------
--- Query 5: Percentile Ranking (FY25 EBITDA Margin)
--- Business Question: Persistent profitability mein top 10% mein hai ya bottom 20% mein?
--- So-What: Decision-grade positioning. Tells exactly how far they are from the top.
+-- Query 5: Peer Median Margin (FY25) - Excluding Persistent
+-- Business Question: Baaki 6 peers ka median margin kya hai?
+-- So-What: True benchmark to compare Persistent against.
 -- -------------------------------------------------------------------------
+WITH PeerMargins AS (
+    SELECT 
+        company,
+        (ebitda / revenue) * 100 AS margin_pct
+    FROM peer_financials
+    WHERE fiscal_year = 'FY25' AND company != 'Persistent Systems'
+),
+RankedMargins AS (
+    SELECT margin_pct, 
+           ROW_NUMBER() OVER (ORDER BY margin_pct) as rn,
+           COUNT(*) OVER() as cnt
+    FROM PeerMargins
+)
 SELECT 
-    company,
-    ROUND((ebitda / revenue) * 100, 2) AS ebitda_margin_percent,
-    ROUND(PERCENT_RANK() OVER (ORDER BY (ebitda / revenue) ASC) * 100, 2) AS percentile_rank
-FROM peer_financials
-WHERE fiscal_year = 'FY25';
+    ROUND(AVG(margin_pct), 2) AS peer_median_margin
+FROM RankedMargins
+WHERE rn IN (FLOOR((cnt+1)/2), CEIL((cnt+1)/2));
 
 
 -- -------------------------------------------------------------------------
--- Query 6: Gap-to-Peer Average Analysis (FY25)
--- Business Question: Persistent aur baaki peers ke average mein kitna gap hai?
--- So-What: Quantifies the exact revenue and EBITDA gap compared to the average peer.
+-- Query 6: Gap-to-Peer Median Analysis (FY25)
+-- Business Question: Persistent aur Peer Median ke beech exact gap kya hai?
+-- So-What: Quantifies the exact financial impact in ₹ Cr.
 -- -------------------------------------------------------------------------
+WITH PeerMedian AS (
+    SELECT AVG(margin_pct) as med_margin
+    FROM (
+        SELECT (ebitda / revenue) * 100 AS margin_pct, 
+               ROW_NUMBER() OVER (ORDER BY (ebitda / revenue)) as rn,
+               COUNT(*) OVER() as cnt
+        FROM peer_financials
+        WHERE fiscal_year = 'FY25' AND company != 'Persistent Systems'
+    ) sub
+    WHERE rn IN (FLOOR((cnt+1)/2), CEIL((cnt+1)/2))
+)
 SELECT 
     p.company,
-    ROUND(p.revenue - a.avg_revenue, 2) AS revenue_gap,
-    ROUND(p.ebitda - a.avg_ebitda, 2) AS ebitda_gap
+    ROUND((p.ebitda / p.revenue) * 100, 2) AS persistent_margin,
+    ROUND(pm.med_margin, 2) AS peer_median_margin,
+    ROUND(pm.med_margin - ((p.ebitda / p.revenue) * 100), 2) AS gap_bps,
+    ROUND(((pm.med_margin - ((p.ebitda / p.revenue) * 100)) / 100) * p.revenue, 2) AS ebitda_lost_cr
 FROM peer_financials p
-JOIN (
-    SELECT fiscal_year, AVG(revenue) as avg_revenue, AVG(ebitda) as avg_ebitda
-    FROM peer_financials
-    GROUP BY fiscal_year
-) a ON p.fiscal_year = a.fiscal_year
+CROSS JOIN PeerMedian pm
 WHERE p.company = 'Persistent Systems' AND p.fiscal_year = 'FY25';
 
 
@@ -112,7 +132,8 @@ ORDER BY fiscal_year DESC, revenue_per_employee DESC;
 SELECT 
     company,
     ROUND((ebitda / revenue) * 100, 2) AS current_margin_percent,
-    ROUND(((ebitda + (employee_cost * 0.05)) / revenue) * 100, 2) AS new_margin_percent
+    ROUND(((ebitda + (employee_cost * 0.05)) / revenue) * 100, 2) AS new_margin_percent,
+    ROUND(((((ebitda + (employee_cost * 0.05)) / revenue) * 100) - ((ebitda / revenue) * 100)) * 100, 0) AS margin_gain_bps
 FROM peer_financials
 WHERE fiscal_year = 'FY25';
 
@@ -132,21 +153,30 @@ ORDER BY yoy_growth_percent DESC;
 
 
 -- -------------------------------------------------------------------------
--- Query 10: EBITDA vs Peer Average Delta
--- Business Question: Average margin se peeche hone ki wajah se kitna EBITDA (₹ Cr) loss hua?
--- So-What: Translates percentage gaps into hard cash (₹ Cr) lost.
+-- Query 10: EBITDA vs Peer Median Delta (Historical)
+-- Business Question: Har saal Peer Median se kitna EBITDA peeche rahe?
+-- So-What: Translates percentage gaps into hard cash (₹ Cr) lost over time.
 -- -------------------------------------------------------------------------
+WITH PeerMedians AS (
+    SELECT fiscal_year, 
+           AVG(ebitda) as med_ebitda
+    FROM (
+        SELECT fiscal_year, ebitda, 
+               ROW_NUMBER() OVER(PARTITION BY fiscal_year ORDER BY ebitda) as rn,
+               COUNT(*) OVER(PARTITION BY fiscal_year) as cnt
+        FROM peer_financials
+        WHERE company != 'Persistent Systems'
+    ) sub
+    WHERE rn IN (FLOOR((cnt+1)/2), CEIL((cnt+1)/2))
+    GROUP BY fiscal_year
+)
 SELECT 
     p.fiscal_year,
     p.ebitda AS actual_ebitda,
-    ROUND(a.avg_ebitda, 2) AS peer_avg_ebitda,
-    ROUND(a.avg_ebitda - p.ebitda, 2) AS ebitda_lost
+    ROUND(m.med_ebitda, 2) AS peer_median_ebitda,
+    ROUND(m.med_ebitda - p.ebitda, 2) AS ebitda_lost_cr
 FROM peer_financials p
-JOIN (
-    SELECT fiscal_year, AVG(ebitda) as avg_ebitda
-    FROM peer_financials
-    GROUP BY fiscal_year
-) a ON p.fiscal_year = a.fiscal_year
+JOIN PeerMedians m ON p.fiscal_year = m.fiscal_year
 WHERE p.company = 'Persistent Systems';
 
 
